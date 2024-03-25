@@ -48,6 +48,16 @@ def MovePaddle():
     PadA = PadA.move(0, PadASpeed)
     pygame.draw.rect(window, white, PadA)
 
+def MovePaddleB():
+    global PadBSpeed, PadB
+    if PadB.top<=0:
+        print("Top of screen B")
+        PadB = PadB.move(965, 2)
+        PadBSpeed = 0
+        
+    PadB = PadB.move(0, PadBSpeed)
+    pygame.draw.rect(window, white, PadB)
+
 timer = pygame.time.Clock()
 
 screenWidth = 1000
@@ -55,16 +65,19 @@ screenHeight = 600
 
 window = pygame.display.set_mode([screenWidth, screenHeight])
 
-ballSpeedx = 1
-ballSpeedy = -1
+ballSpeedx = 6
+ballSpeedy = -6
 black = (0,0,0)
 white = (255, 255, 255)
 radius = 20
 ballLocation=[500, 300]
 ball = pygame.Rect(ballLocation, (radius, radius))
 
-PadA = pygame.Rect((0,150), (50,300))
+PadA = pygame.Rect((0,150), (25,100))
 PadASpeed = 0
+
+PadB = pygame.Rect((965, 150), (25, 100))
+PadBSpeed = 0
 
 scoreA=0
 scoreB=0
@@ -75,21 +88,31 @@ font = pygame.font.Font(None,24)
 while True:
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                PadASpeed = -6
             if event.key == pygame.K_UP:
-                PadASpeed = -2
+                PadBSpeed = -6
+            if event.key == pygame.K_s:
+                PadASpeed = 6
             if event.key == pygame.K_DOWN:
-                PadASpeed = 2
+                PadBSpeed = 6
         elif event.type == pygame.KEYUP:
+            if event.key == pygame.K_w:
+                PadASpeed = 0
             if event.key == pygame.K_UP:
                 PadASpeed = 0
-            if event.key == pygame.K_DOWN:
+            if event.key == pygame.K_s:
                 PadASpeed = 0
+            if event.key == pygame.K_DOWN:
+                PadBSpeed = 0
     if PadA.colliderect(ball):
         ballSpeedx = -ballSpeedx
+    
     timer.tick(60)
     window.fill(black)
     MoveBall()
     MovePaddle()
+    MovePaddleB()
     drawCenterLine()
     drawScore(font)
     pygame.display.flip()
