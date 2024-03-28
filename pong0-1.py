@@ -8,36 +8,40 @@ def resetBall():
     global ballLocation
     ballLocation = [500, 300]
         
-def scoreColor():
+def scoreColor(font):
     global scoreA, scoreB
     if scoreA > scoreB:
         text=font.render(str(scoreA), True, green)
+        window.blit(text, (200, 30))
         text=font.render(str(scoreB), True, red)
+        window.blit(text, (700, 30))
     if scoreB > scoreA:
         text=font.render(str(scoreA), True, red)
+        window.blit(text, (200, 30))
         text=font.render(str(scoreB), True, green)
+        window.blit(text, (700, 30))
 
-def drawScore(font):
-    global scoreA, scoreB
+#def drawScore(font):
+  #  global scoreA, scoreB
     
     text=font.render(str(scoreA), True, white)
     window.blit(text, (200, 30))
     text = font.render(str(scoreB), True, white)
     window.blit(text, (700, 30))
-        
-        
 
 def MoveBall():
-    global scoreA, scoreB, ballSpeedx, ballSpeedy, ballLocation, ball
+    global scoreA, scoreB, ballSpeedx, ballSpeedy, ballLocation, ball, font
     
     if ballLocation[0] > screenWidth:
         ballSpeedx = -ballSpeedx
         scoreA = scoreA + 1
+        scoreColor(font)
         resetBall()
     
     if ballLocation[0] < 0:
         ballSpeedx = -ballSpeedx
         scoreB = scoreB + 1
+        scoreColor(font)
         resetBall()
     
     if ballLocation[1] < 0:
@@ -85,10 +89,12 @@ screenHeight = 600
 
 window = pygame.display.set_mode([screenWidth, screenHeight])
 
-ballSpeedx = 6
-ballSpeedy = -6
+ballSpeedx = 8
+ballSpeedy = -8
 black = (0,0,0)
-white = (255, 255, 255)
+white = (0, 0, 255)
+green = (0, 255, 0)
+red = (255, 0, 0)
 radius = 20
 ballLocation=[500, 300]
 ball = pygame.Rect(ballLocation, (radius, radius))
@@ -146,7 +152,7 @@ while True:
     MovePaddle()
     MovePaddleB()
     drawCenterLine()
-    drawScore(font)
+    scoreColor(font)
     pygame.display.flip()
     
     #check quit event
